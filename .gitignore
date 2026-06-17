@@ -1,0 +1,33 @@
+# 依赖目录
+node_modules/
+vendor/
+
+# 构建输出
+dist/
+build/
+
+# 环境文件
+.env
+.env.local
+
+# IDE 文件
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+
+# 日志文件
+*.log
+npm-debug.log*
+
+# 临时文件
+tmp/
+temp/
+
+# 会话索引（可能包含敏感信息）
+sessions/*.md
+sessions/.last_update
