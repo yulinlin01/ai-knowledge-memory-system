@@ -1,7 +1,8 @@
 #!/bin/bash
 
-# 离线索引生成脚本（增量更新）
+# 离线索引生成脚本（增量更新 + 完整版格式）
 # 只处理上次更新后新增或修改的 JSONL 文件
+# 生成完整版索引：基本信息 + 主题关键词 + 摘要 + 详细内容
 
 SESSIONS_DIR="D:/Claude-memory/sessions"
 CLAUDE_DIR="$HOME/.claude/projects"
@@ -28,7 +29,7 @@ total_files=0
 updated_files=0
 skipped_files=0
 
-echo "开始生成离线索引..."
+echo "开始生成离线索引（完整版）..."
 
 # 扫描所有项目目录
 for project_dir in "$CLAUDE_DIR"/*/; do
@@ -93,7 +94,14 @@ for project_dir in "$CLAUDE_DIR"/*/; do
                     fi
                 fi
 
-                # 生成索引文件
+                # 提取更多详细信息
+                # 提取 AI 回复摘要
+                ai_summary=$(grep '"type":"assistant"' "$jsonl_file" | head -1 | grep -o '"content":"[^"]*"' | head -1 | sed 's/"content":"//;s/"$//' | cut -c1-100 2>/dev/null)
+
+                # 提取工具调用
+                tools_used=$(grep '"type":"tool_use"' "$jsonl_file" | grep -o '"name":"[^"]*"' | sed 's/"name":"//;s/"//' | sort -u | tr '\n' ', ' | sed 's/, $//' 2>/dev/null)
+
+                # 生成完整版索引
                 cat > "$index_file" << EOF
 # 会话索引
 
@@ -109,10 +117,35 @@ ${title}
 ${keywords:-无}
 
 ## 摘要
-待补充（需要进一步分析会话内容）
+${ai_summary:-待补充}
+
+---
+
+## 详细内容
+
+### 任务完成情况
+
+| 任务 | 状态 | 交付物 | 核心内容 |
+|------|------|--------|---------|
+| 待补充 | ⏳ | 无 | 需要分析会话内容 |
+
+### 关键决策
+
+| 决策 | 内容 | 原因 |
+|------|------|------|
+| 待补充 | 无 | 无 |
+
+### 踩坑记录
+
+| 问题 | 原因 | 解决方案 |
+|------|------|---------|
+| 待补充 | 无 | 无 |
+
+---
 
 ## 参考
 - 原始文件：${jsonl_file}
+- 工具调用：${tools_used:-无}
 EOF
 
                 updated_files=$((updated_files + 1))
@@ -126,9 +159,11 @@ done
 echo "$CURRENT_UPDATE" > "$LAST_UPDATE_FILE"
 
 echo ""
-echo "离线索引生成完成！"
+echo "离线索引生成完成（完整版）！"
 echo "统计："
 echo "  总文件数: $total_files"
 echo "  新增/更新: $updated_files"
 echo "  跳过: $skipped_files"
 echo "索引目录: $SESSIONS_DIR"
+echo ""
+echo "注意：新生成的索引为完整版格式，但详细内容需要手动补充。"
