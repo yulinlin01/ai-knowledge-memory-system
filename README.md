@@ -78,7 +78,7 @@ V1 知识库          V2 跨会话记忆         V3 快速搜索
 ## 📁 目录结构
 
 ```
-ai-memory-system/
+ai-knowledge-memory-system/
 ├── v1-knowledge-base/                 # V1：前端面试知识库
 │   ├── 一、渲染流程与性能优化.md
 │   ├── 二、DOM与事件模型.md

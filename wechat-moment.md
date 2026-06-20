@@ -87,6 +87,6 @@ v1 缺少「快速回顾」能力，所以我做了 v2 升级。
 
 我们总说 AI 很强，但它连昨天聊了什么都记不住。给它装个记忆，它才能真正成为长期搭档。
 
-已开源：https://github.com/yulinlin01/ai-memory-system
+已开源：https://github.com/yulinlin01/ai-knowledge-memory-system
 
 #AI #Claude #Obsidian #效率工具 #开源
